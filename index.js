@@ -568,32 +568,93 @@ bot.hears("🏢 Агентства недвижимости", async (ctx) => {
 
 // Обработчик кнопки "🚗 Аренда автомобилей"
 bot.hears("🚗 Аренда автомобилей", async (ctx) => {
-  ctx.reply("Здесь вы можете найти адреса агентств аренды автомобилей.", Markup.inlineKeyboard([
-    Markup.button.callback("Audi A4", "car:Audi A4"),
-    Markup.button.callback("BMW X5", "car:BMW X5"),
-    Markup.button.callback("Mercedes-Benz E-Class", "car:Mercedes-Benz E-Class"),
-  ]));
+  const replyMarkupClio = Markup.inlineKeyboard([
+    Markup.button.callback("Renault Clio", "car:Renault Clio"),
+  ]);
+  ctx.replyWithPhoto({ source: "./img/renault-clio.jpg" }, { caption: "" });
+  await sleep(500);
+  ctx.reply("Стоимость аренды одного дня: 40€", replyMarkupClio);
+  bot.action("car:Renault Clio", (ctx) => {
+    ctx.answerCbQuery('Вы нажали на кнопку "Renault Clio"');
+  });
+
+  const replyMarkupEgea16 = Markup.inlineKeyboard([
+    Markup.button.callback("Fiat Egea 1.6", "car:Renault Egea 1.6"),
+  ]);
+  ctx.replyWithPhoto({ source: "./img/fiat-egea1.6.jpg" }, { caption: "" });
+  await sleep(500);
+  ctx.reply("Стоимость аренды одного дня: 40€", replyMarkupEgea16);
+  bot.action("car:Fiat Egea 1.6", (ctx) => {
+    ctx.answerCbQuery('Вы нажали на кнопку "Fiat Egea 1.6"');
+  });
+
+  const replyMarkupEgea14 = Markup.inlineKeyboard([
+    Markup.button.callback("Fiat Egea 1.4", "car:Fiat Egea 1.4"),
+  ]);
+  ctx.replyWithPhoto({ source: "./img/fiat-egea1.4.jpg" }, { caption: "" });
+  await sleep(500);
+  ctx.reply("Стоимость аренды одного дня: 40€", replyMarkupEgea14);
+  bot.action("car:Fiat Egea 1.4", (ctx) => {
+    ctx.answerCbQuery('Вы нажали на кнопку "Fiat Egea 1.6"');
+  });
+
+  const replyMarkupEgea13 = Markup.inlineKeyboard([
+    Markup.button.callback("Fiat Egea 1.3", "car:Fiat Egea 1.3"),
+  ]);
+  ctx.replyWithPhoto({ source: "./img/fiat-egea1.3.jpg" }, { caption: "" });
+  await sleep(500);
+  ctx.reply("Стоимость аренды одного дня: 40€", replyMarkupEgea13);
+  bot.action("car:Fiat Egea 1.3", (ctx) => {
+    ctx.answerCbQuery('Вы нажали на кнопку "Fiat Egea 1.3"');
+  });
+
+  const replyMarkupFiorino = Markup.inlineKeyboard([
+    Markup.button.callback("Fiat Fiorino", "car:Fiat Fiorino"),
+  ]);
+  ctx.replyWithPhoto({ source: "./img/fiat-fiorino.jpg" }, { caption: "" });
+  await sleep(500);
+  ctx.reply("Стоимость аренды одного дня: 40€", replyMarkupFiorino);
+  bot.action("car:Fiat Fiorino", (ctx) => {
+    ctx.answerCbQuery('Вы нажали на кнопку "Fiat Fiorino"');
+  });
 });
 
-let carData = '';
-let textData = '';
+//   ctx.reply("Здесь вы можете найти адреса агентств аренды автомобилей.", Markup.inlineKeyboard([
+//     Markup.button.callback("Audi A4", "car:Audi A4"),
+//     Markup.button.callback("BMW X5", "car:BMW X5"),
+//     Markup.button.callback("Mercedes-Benz E-Class", "car:Mercedes-Benz E-Class"),
+//   ]));
+// });
+
+let carData = "";
+let textData = "";
 
 // Обрабатываем нажатие на кнопку с выбранным автомобилем
 bot.action(/^car:(.*)/, async (ctx) => {
   carData = ctx.match[1]; // Получаем выбранный автомобиль из callback-данных
-  console.log('carData', carData)
+  console.log("carData", carData);
 
   // Запрашиваем у пользователя его данные
-  ctx.reply("Введите свои данные:");
+  const dataQuery = `Напишите пожалуйста Ваши:
+ФИО
+Номер телефона
+Дату начала аренды
+Сколько дней аренды
+Адрес места где вы проживаете или название отеля`;
+  ctx.replyWithHTML(dataQuery);
+  //ctx.reply("Напишите пожалуйста Ваши: ФИО и номер телефона:");
   // Следующее сообщение пользователя будет обработано событием 'message' в следующем блоке кода
 });
 
 // Обрабатываем сообщение пользователя с его данными
-bot.on('message', async (ctx) => {
-  textData = ctx?.update?.message?.text
+bot.on("message", async (ctx) => {
+  textData = ctx?.update?.message?.text;
   // Отправляем данные в ваш Телеграм-аккаунт
   const yourTelegramChatId = process.env.CHAT_ID; // Замените на ваш фактический идентификатор чата
-  await ctx.telegram.sendMessage(yourTelegramChatId, `Новый заказ:\nАвтомобиль: ${carData}\nДанные пользователя: ${textData}`);
+  await ctx.telegram.sendMessage(
+    yourTelegramChatId,
+    `Новый заказ:\nАвтомобиль: ${carData}\nДанные пользователя: ${textData}`
+  );
 
   // Отправляем пользователю подтверждение о получении данных
   ctx.reply("Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.");
